@@ -1,28 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { calendarApi } from '../api';
-import { convertEventsToDateEvents } from '../helpers';
 import { fileUpload } from '../helpers/fileUpload';
 import {
     onAddToCarrito, onCreatedProducto,
     onCreateProducto, onLoadProductoByID,
     onLoadProducts, onRemoveToCarrito,
-    onSelectProduct, setPhotosToSelectedProducto, onDeleteProduct,
+    onSelectProduct, setPhotosToSelectedProducto, onDeleteProduct, onUpdateProduct,
     onAddCantidad, onLessCantidad, onLoadProductsInSearch, onLoadPedidos, onSelectPedido, onLessCantidadPedidoProducto, onAddCantidadPedidoProducto, onRemoveToPedido, onAddToPedidoSelected, onEditPedido, onCreatePedido, onAddToProductos, onChangePageNumber, onLastPage
 } from '../store/bonillaShop/bonillaShopSlice';
 import { useUiStore } from './useUiStore';
 import { useRouter } from 'next/router';
-// import { v2 as cloudinary } from 'cloudinary';
-
-// cloudinary.config({
-//     //yarn add cloudinary
-//     //Extraer del dashboard de cloudinary
-//     //yarn add -D setimmediate
-//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//     api_key: process.env.CLOUDINARY_API_KEY,
-//     api_secret: process.env.CLOUDINARY_API_SECRET,
-//     secure: true,
-// });
 
 
 export const useBonillaShopStore = () => {
@@ -129,11 +117,11 @@ export const useBonillaShopStore = () => {
         }
     }
 
-    const startLoadingProductoByID = async (productoID) => {
+    const startLoadingProductoByID = async (productId) => {
         try {
-            const { data } = await calendarApi.get(`/productos/${productoID}`);
+            const { data } = await calendarApi.get(`products/product/${productId}`);
             // console.log(data);
-            dispatch(onSelectProduct(data.producto));
+            dispatch(onSelectProduct(data));
 
             // const productos = convertEventsToDateEvents();
             dispatch(onLoadProductoByID());
@@ -288,6 +276,8 @@ export const useBonillaShopStore = () => {
             // console.log(data);
             dispatch(onCreatedProducto());
             dispatch(onSelectProduct(data));
+            dispatch(onUpdateProduct(data));
+
             Swal.fire('Cambios guardados exitosamente', 'Correcto', 'success');
 
         } catch (error) {

@@ -1,8 +1,4 @@
-import { useEffect } from "react";
 import ProductCard from "./components/ProductCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd } from '@fortawesome/free-solid-svg-icons';
-import { useBonillaShopStore } from "@/hooks/useBonillaShopStore";
 import { useSelector } from "react-redux";
 import { ProductoModal } from "./components/ProductoModal";
 

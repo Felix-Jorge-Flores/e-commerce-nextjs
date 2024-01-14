@@ -43,7 +43,6 @@ export default function HomeBonilla() {
         className="bg-blue-50 text-black px-4 py-2 rounded"
         onClick={() => {
           openDateModal();
-          // console.log("Hola");
         }}
       >
         <FontAwesomeIcon icon={faAdd} className="mr-1" />

@@ -49,6 +49,13 @@ export const bonillaShopSlice = createSlice({
         onDeleteProduct: (state, { payload }) => {
             state.productos = state.productos.filter(producto => producto.productId !== payload);
         },
+
+        onUpdateProduct: (state, { payload }) => {
+            const index = state.productos.findIndex(producto => producto.productId === payload.productId);
+            if (index !== -1) {
+                state.productos[index] = payload;
+            }
+        },
         onLoadPedidos: (state, { payload = [] }) => {
             state.isLoadingProductos = false;
             state.pedidos = payload;
@@ -238,7 +245,7 @@ export const bonillaShopSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { onLoadProducts, onSelectProduct, onAddToCarrito, onLoadProductoByID, onCreateProducto,
-    setPhotosToSelectedProducto, onCreatedProducto, onRemoveToCarrito, setCantidadProductos, onChangePageNumber,
+    setPhotosToSelectedProducto, onCreatedProducto, onRemoveToCarrito, setCantidadProductos, onChangePageNumber, onUpdateProduct,
     onAddCantidad, onLessCantidad, onLoadProductsInSearch, onLogoutBonillaShop, onLoadPedidos, onSelectPedido, onLastPage,
     onRemoveToPedido, onAddToPedidoSelected, onEditPedido, onCreatePedido, onAddToProductos, onChangeEstadoPedido, onDeleteProduct,
     onAddCantidadPedidoProducto, onLessCantidadPedidoProducto, onFilterproductosInSearch } = bonillaShopSlice.actions;
