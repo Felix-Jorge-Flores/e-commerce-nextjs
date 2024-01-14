@@ -23,9 +23,6 @@ export const useAuthStore = () => {
         try {
             const { data } = await calendarApi.post('/app/login', { email, password, role });
             console.log({ data });
-            // localStorage.setItem('token', data.token);
-            // localStorage.setItem('token-init-date', new Date().getTime());
-
             dispatch(onLogin({ name: data.fname ?? 'No name', uid: data.time, role: role }));
             redirectTo('');
 
@@ -91,7 +88,6 @@ export const useAuthStore = () => {
 
     const startLogout = () => {
         localStorage.clear();
-        dispatch(onLogoutCalendar());
         dispatch(onLogoutBonillaShop());
         dispatch(onLogout());
     }
