@@ -107,11 +107,6 @@ export const useBonillaShopStore = () => {
     const startLoadingProductosByPageNumber = async (page) => {
         try {
             const { data } = await calendarApi.get(`/products/viewPaged?page=${page}&sortBy=productId`);
-            if (data.last) {
-                dispatch(onLastPage());
-                Swal.fire("Llegaste al último producto", "", "warning")
-                return;
-            }
             const todosContenidos = data.content.every(item =>
                 productos.some(producto => producto.productId === item.productId)
             );
@@ -121,6 +116,11 @@ export const useBonillaShopStore = () => {
             } else {
                 console.log('Al menos un elemento de data.content no está en productos.');
                 dispatch(onLoadProducts([...productos, ...data.content]));
+            }
+            if (data.last) {
+                dispatch(onLastPage());
+                Swal.fire("Llegaste al último producto", "", "warning")
+                return;
             }
         } catch (error) {
             console.log('Error cargando productos');
