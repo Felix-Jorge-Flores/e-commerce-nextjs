@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
-import ProductCard from "./components/ProductCard";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { useBonillaShopStore } from "@/hooks/useBonillaShopStore";
 import { useSelector } from "react-redux";
 import { useAuthStore, useUiStore } from "@/hooks";
 import { ProductoModal } from "./components/ProductoModal";
+import ProductCard from "./components/ProductCard";
+
+const debounce = (func, delay) => {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+};
 
 export default function HomeBonilla() {
   const { startLoadingProductosByPageNumber } = useBonillaShopStore();
@@ -22,15 +30,25 @@ export default function HomeBonilla() {
     setPageNumber((prevPageNumber) => prevPageNumber + 1);
   };
 
+  // Utiliza la implementación de debounce
+  const handleScroll = debounce(() => {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 10) {
+      handleLoadMore();
+    }
+  }, 100);
 
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   return (
     <main className="flex flex-col items-center justify-between px-4 md:px-24 pt-2 bg-black">
-      {(status === 'authenticated') && (
+      {status === 'authenticated' && (
         <div className={`dashboard-card ${status === 'authenticated' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'} border border-gray-300 rounded-md p-4 m-4`}>
           <div>
             <h1 className="text-4xl font-bold">
-              {(user.role==="admin")?'ADMINISTRADOR':'CLIENTE'}
+              {user.role === "admin" ? 'ADMINISTRADOR' : 'CLIENTE'}
             </h1>
             <h1 className="text-2xl font-bold">
               Autenticado
@@ -56,7 +74,7 @@ export default function HomeBonilla() {
         </div>
       )}
       <ProductoModal />
-      <div className="flex justify-center m-4">
+      {/* <div className="flex justify-center m-4">
         <button
           className="bg-blue-900 text-white px-4 py-2 rounded"
           hidden={isLastPage}
@@ -64,7 +82,7 @@ export default function HomeBonilla() {
         >
           Cargar más productos
         </button>
-      </div>
+      </div> */}
     </main>
   );
 }
